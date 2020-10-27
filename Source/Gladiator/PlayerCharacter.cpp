@@ -2,11 +2,18 @@
 
 
 #include "PlayerCharacter.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
+
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
+
+
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -37,7 +44,7 @@ void APlayerCharacter::MoveForward(float Val)
 		FRotator CamRot = GetControlRotation();
 		CamRot.Pitch = 0.f;
 
-		FVector MoveDir = CamRot.RotateVector(FVector::RightVector);
+		FVector MoveDir = CamRot.RotateVector(FVector::ForwardVector);
 
 		GetCharacterMovement()->AddInputVector(MoveDir * Val);
 
@@ -48,6 +55,23 @@ void APlayerCharacter::MoveForward(float Val)
 
 void APlayerCharacter::MoveRight(float Val)
 {
+
+	if (!bIsAlive)
+		return;
+
+	if (!bIsAttacking) {
+
+		FRotator CamRot = GetControlRotation();
+		CamRot.Pitch = 0.f;
+
+		FVector MoveDir = CamRot.RotateVector(FVector::RightVector);
+
+		GetCharacterMovement()->AddInputVector(MoveDir * Val);
+
+
+	}
+
+
 }
 
 void APlayerCharacter::CameraPitch(float Val)
@@ -70,6 +94,27 @@ void APlayerCharacter::CameraYaw(float Val)
 
 void APlayerCharacter::Attack()
 {
+
+
+}
+
+void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComp, 
+	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	bool BFromSweep, const FHitResult& SweepResult)
+{
+
+	if (OtherActor->ActorHasTag("Shield")) {
+
+		UE_LOG(LogTemp, Warning, TEXT("Collided With SHIELD"));
+
+	}
+
+	else if (OtherActor->ActorHasTag("Hammer")) {
+
+		UE_LOG(LogTemp, Warning, TEXT("Collided With HAMMER"));
+
+
+	}
 
 
 }

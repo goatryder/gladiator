@@ -32,4 +32,11 @@ protected:
 
 	void Attack();
 
+public:
+
+	UFUNCTION()
+		virtual void OnBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool BFromSweep,
+			const FHitResult& SweepResult);
+
 };
