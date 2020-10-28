@@ -86,5 +86,8 @@ bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
 
 void AArenaCharacter::Attack()
 {
+
+	bIsAttacking = true;
+
 }
 
