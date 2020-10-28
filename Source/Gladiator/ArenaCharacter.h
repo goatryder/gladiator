@@ -6,6 +6,12 @@
 #include "GameFramework/Character.h"
 #include "ArenaCharacter.generated.h"
 
+class APickableItemBase;
+
+class APickableWeapon;
+
+class UBoxComponent;
+
 UCLASS()
 class GLADIATOR_API AArenaCharacter : public ACharacter
 {
@@ -34,5 +40,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 		bool bIsAlive = true;
 
+	bool PickShield(APickableItemBase* pickedShield);
+
+	bool PickWeapon(APickableWeapon* pickedWeapon);
+
+	APickableItemBase* Shield;
+	APickableWeapon* Weapon;
+
+	UBoxComponent* WeaponCollider;
+
+	virtual void Attack();
 
 };

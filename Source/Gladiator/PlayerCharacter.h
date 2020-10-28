@@ -30,7 +30,7 @@ protected:
 	void CameraPitch(float Val);
 	void CameraYaw(float Val);
 
-	void Attack();
+	void Attack() override;
 
 public:
 

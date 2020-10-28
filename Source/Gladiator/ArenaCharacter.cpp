@@ -3,6 +3,11 @@
 
 #include "ArenaCharacter.h"
 
+#include "PickableItemBase.h"
+#include "PickableWeapon.h"
+
+#include "Components/BoxComponent.h"
+
 // Sets default values
 AArenaCharacter::AArenaCharacter()
 {
@@ -30,5 +35,56 @@ void AArenaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+bool AArenaCharacter::PickShield(APickableItemBase* pickedShield)
+{
+
+	if (!pickedShield)
+		return false;
+
+	if (!Shield) {
+
+		if (pickedShield->AttachItemTo(GetMesh(), TEXT("DualWeaponPoint")) == true) {
+
+			Shield = pickedShield;
+			return true;
+
+		}
+
+
+	}
+
+	return false;
+
+
+}
+
+bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
+{
+
+	if (!pickedWeapon)
+		return false;
+
+	if (!Weapon) {
+
+		if (pickedWeapon->AttachItemTo(GetMesh(), TEXT("WeaponPoint")) == true) {
+
+			Weapon = pickedWeapon;
+			
+			WeaponCollider = pickedWeapon->GetDamageBox();
+			WeaponCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			
+			return true;
+
+		}
+
+	}
+
+	return false;
+}
+
+void AArenaCharacter::Attack()
+{
 }
 

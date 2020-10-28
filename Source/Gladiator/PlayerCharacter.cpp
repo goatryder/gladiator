@@ -6,6 +6,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 
+#include "PickableItemBase.h"
+#include "PickableWeapon.h"
+
 
 void APlayerCharacter::BeginPlay()
 {
@@ -105,14 +108,19 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComp,
 
 	if (OtherActor->ActorHasTag("Shield")) {
 
-		UE_LOG(LogTemp, Warning, TEXT("Collided With SHIELD"));
+		// UE_LOG(LogTemp, Warning, TEXT("Collided With SHIELD"));
+
+		APickableItemBase* PickedShield = Cast<APickableItemBase>(OtherActor);
+		PickShield(PickedShield);
 
 	}
 
 	else if (OtherActor->ActorHasTag("Hammer")) {
 
-		UE_LOG(LogTemp, Warning, TEXT("Collided With HAMMER"));
+		// UE_LOG(LogTemp, Warning, TEXT("Collided With HAMMER"));
 
+		APickableWeapon* PickedWeapon = Cast<APickableWeapon>(OtherActor);
+		PickWeapon(PickedWeapon);
 
 	}
 
