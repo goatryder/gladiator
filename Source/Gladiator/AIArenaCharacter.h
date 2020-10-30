@@ -28,4 +28,7 @@ class GLADIATOR_API AAIArenaCharacter : public AArenaCharacter
 	
 	UFUNCTION(BlueprintCallable)
 		virtual void Attack() override;
+
+	bool ApplyDamage() override;
+
 };

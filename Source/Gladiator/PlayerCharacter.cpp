@@ -9,6 +9,7 @@
 #include "PickableItemBase.h"
 #include "PickableWeapon.h"
 
+#include "Kismet/GameplayStatics.h"
 
 void APlayerCharacter::BeginPlay()
 {
@@ -126,5 +127,67 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlapComp,
 
 	}
 
+
+}
+
+void APlayerCharacter::OnWeaponBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweepFrom, const FHitResult& SweepResult)
+{
+
+	if (!bCanDetectColliison)
+		return;
+
+	if (OtherActor == this)
+		return;
+
+	AArenaCharacter* OponentArenaChar = Cast<AArenaCharacter>(OtherActor);
+
+	// if (OtherActor->IsA(AArenaCharacter::StaticClass())) {
+	if (OponentArenaChar) {
+
+		bCanDetectColliison = false;
+
+		// UE_LOG(LogTemp, Warning, TEXT("Collided with AArenaCharacter"));
+
+		bool OponentIsDead = OponentArenaChar->ApplyDamage();
+
+		if (OponentIsDead) {
+			
+			FTimerHandle UnusedHandle;
+
+			GetWorldTimerManager().SetTimer(
+				UnusedHandle, this, &APlayerCharacter::RestartGame, 3.f, false);
+
+		}
+
+	}
+
+}
+
+bool APlayerCharacter::ApplyDamage()
+{
+
+	// UE_LOG(LogTemp, Warning, TEXT("ApplyDamage of APlayerCharacter"));
+
+	bool isDead = Super::ApplyDamage();
+
+	if (isDead) {
+
+		FTimerHandle UnusedHandle;
+
+		GetWorldTimerManager().SetTimer(
+			UnusedHandle, this, &APlayerCharacter::RestartGame, 3.f, false);
+
+	}
+
+	return isDead;
+}
+
+void APlayerCharacter::RestartGame()
+{
+
+	// UE_LOG(LogTemp, Warning, TEXT("Player is Dead, Todo: Restart Game"));
+
+
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 
 }

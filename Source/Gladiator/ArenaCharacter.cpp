@@ -92,9 +92,12 @@ bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
 			
 			WeaponCollider = pickedWeapon->GetDamageBox();
 
-			if (WeaponCollider)
+			if (WeaponCollider) {
+				
 				WeaponCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			WeaponCollider->OnComponentBeginOverlap.AddDynamic(this, &AArenaCharacter::OnWeaponBeginOverlap);
+				WeaponCollider->OnComponentBeginOverlap.AddDynamic(this, &AArenaCharacter::OnWeaponBeginOverlap);
+
+			}
 
 			return true;
 
@@ -108,6 +111,9 @@ bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
 void AArenaCharacter::Attack()
 {
 
+	if (!bIsAlive)
+		return;
+
 	if (Weapon) {
 
 		bIsAttacking = true;
@@ -119,21 +125,47 @@ void AArenaCharacter::Attack()
 
 }
 
+bool AArenaCharacter::ApplyDamage()
+{
+
+	// UE_LOG(LogTemp, Warning, TEXT("ApplyDamage of AArenaCharacter"));
+
+	Health -= 10.f;
+
+	if (Health <= 0.f) {
+
+		bIsAlive = false;
+
+		return true;
+	}
+
+	return false;
+}
+
 void AArenaCharacter::OnWeaponBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor, 
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweepFrom, const FHitResult& SweepResult)
 {	
 
 	if (!bCanDetectColliison)
 		return;
+
+	if (OtherActor == this)
+		return;
 	
-	if (OtherActor->IsA(AArenaCharacter::StaticClass())) {
+	AArenaCharacter* OponentArenaChar = Cast<AArenaCharacter>(OtherActor);
+
+	// if (OtherActor->IsA(AArenaCharacter::StaticClass())) {
+	if (OponentArenaChar) {
 
 		bCanDetectColliison = false;
 		
-		UE_LOG(LogTemp, Warning, TEXT("Collided with AArenaCharacter"))
+		// UE_LOG(LogTemp, Warning, TEXT("Collided with AArenaCharacter"));
 	
+		OponentArenaChar->ApplyDamage();
+
 	}
 
 
 }
+
 

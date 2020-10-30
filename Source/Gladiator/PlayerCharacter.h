@@ -39,4 +39,13 @@ public:
 			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool BFromSweep,
 			const FHitResult& SweepResult);
 
+	virtual void OnWeaponBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweepFrom,
+		const FHitResult& SweepResult) override;
+
+	bool ApplyDamage() override;
+
+	UFUNCTION(BlueprintCallable)
+		void RestartGame();
+
 };

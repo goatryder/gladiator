@@ -59,4 +59,11 @@ public:
 	bool bDisableAttack;
 	bool bCanDetectColliison;
 
+
+	UPROPERTY(BlueprintReadOnly)
+		float Health = 100.f;
+
+	virtual bool ApplyDamage();
+
+
 };

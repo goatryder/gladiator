@@ -47,3 +47,21 @@ void AAIArenaCharacter::Attack()
 
 
 }
+
+bool AAIArenaCharacter::ApplyDamage()
+{
+
+	bool IsDead = Super::ApplyDamage();
+
+	if (IsDead) {
+
+		AAIController* MyAI = Cast<AAIController>(GetController());
+		//MyAI->BrainComponent->StopLogic("");
+		MyAI->UnPossess();
+
+	}
+
+
+	return IsDead;
+
+}
