@@ -38,3 +38,12 @@ void AAIArenaCharacter::CreateAndAttachWeapons()
 		PickWeapon(Cast<APickableWeapon>(GetWorld()->SpawnActor(WeaponClass, &Position, &Rotation)));
 
 }
+
+void AAIArenaCharacter::Attack()
+{
+
+	Super::Attack();
+
+
+
+}

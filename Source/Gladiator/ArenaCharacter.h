@@ -51,4 +51,12 @@ public:
 
 	virtual void Attack();
 
+	UFUNCTION()
+		virtual void OnWeaponBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweepFrom,
+			const FHitResult& SweepResult);
+
+	bool bDisableAttack;
+	bool bCanDetectColliison;
+
 };

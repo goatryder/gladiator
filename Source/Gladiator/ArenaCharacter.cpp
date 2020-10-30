@@ -28,6 +28,24 @@ void AArenaCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+
+	if (bIsAttacking) {
+
+		if (WeaponCollider)
+			WeaponCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	}
+
+	else {
+
+		if (WeaponCollider)
+			WeaponCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		bCanDetectColliison = false;
+
+	}
+
 }
 
 // Called to bind functionality to input
@@ -73,8 +91,11 @@ bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
 			Weapon = pickedWeapon;
 			
 			WeaponCollider = pickedWeapon->GetDamageBox();
-			WeaponCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			
+
+			if (WeaponCollider)
+				WeaponCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			WeaponCollider->OnComponentBeginOverlap.AddDynamic(this, &AArenaCharacter::OnWeaponBeginOverlap);
+
 			return true;
 
 		}
@@ -87,7 +108,32 @@ bool AArenaCharacter::PickWeapon(APickableWeapon* pickedWeapon)
 void AArenaCharacter::Attack()
 {
 
-	bIsAttacking = true;
+	if (Weapon) {
+
+		bIsAttacking = true;
+		bCanDetectColliison = true;
+
+
+	}
+
+
+}
+
+void AArenaCharacter::OnWeaponBeginOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bSweepFrom, const FHitResult& SweepResult)
+{	
+
+	if (!bCanDetectColliison)
+		return;
+	
+	if (OtherActor->IsA(AArenaCharacter::StaticClass())) {
+
+		bCanDetectColliison = false;
+		
+		UE_LOG(LogTemp, Warning, TEXT("Collided with AArenaCharacter"))
+	
+	}
+
 
 }
 

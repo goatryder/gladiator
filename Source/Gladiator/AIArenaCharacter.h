@@ -25,6 +25,7 @@ class GLADIATOR_API AAIArenaCharacter : public AArenaCharacter
 		TSubclassOf<APickableWeapon> WeaponClass;
 
 	void CreateAndAttachWeapons();
-
-
+	
+	UFUNCTION(BlueprintCallable)
+		virtual void Attack() override;
 };

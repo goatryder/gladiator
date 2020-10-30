@@ -98,12 +98,8 @@ void APlayerCharacter::CameraYaw(float Val)
 void APlayerCharacter::Attack()
 {
 
-	if (Weapon) {
+	Super::Attack();
 
-		Super::Attack();
-
-
-	}
 
 }
 
